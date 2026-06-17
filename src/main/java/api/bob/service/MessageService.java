@@ -15,14 +15,15 @@ public class MessageService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     private String lmStudioUrl = "http://127.0.0.1:1234/api/v1/chat";
-
+    private String sys_prompt;
     public String getResponse(String message, String model){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, Object> bodyUser = new HashMap<>();
         bodyUser.put("model", model);
-        bodyUser.put("input", message);
+        String messageFormate = "<|system|>\nTu es Bob, un assistant IA amical, direct et concis. Tu réponds directement à l'utilisateur au présent sans analyser sa phrase.<|end|>\n<|user|>\n" + message + "<|end|>\n<|assistant|>";
+        bodyUser.put("input", messageFormate);
         bodyUser.put("stream", false);
 
         HttpEntity<Map<String, Object>> req = new HttpEntity<>(bodyUser, headers);
